@@ -1,6 +1,6 @@
 import * as chalk from "chalk";
 import { ButtonInteraction, CommandInteraction, MessageActionRow, MessageActionRowOptions, MessageComponentOptions } from "discord.js";
-import { logError } from "../../utility/consolelogger";
+import { logError } from "../../utility/logging/consolelogger";
 import { failureMessage } from "../../utility/statusreply";
 
 export function setup(ctx: CommandInteraction) {

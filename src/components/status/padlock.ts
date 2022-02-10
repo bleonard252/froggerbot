@@ -1,6 +1,6 @@
 import * as chalk from "chalk";
 import { ButtonInteraction, InteractionReplyOptions, MessageButton, MessageButtonOptions, MessageOptions } from "discord.js";
-import { logError } from "../../utility/consolelogger";
+import { logError } from "../../utility/logging/consolelogger";
 import { failureMessage } from "../../utility/statusreply";
 
 module.exports = {

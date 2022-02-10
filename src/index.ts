@@ -2,8 +2,9 @@ import * as chalk from "chalk";
 import { Client, Collection } from "discord.js";
 import * as FileHound from 'filehound';
 import * as fs from "fs";
-import { logError, logInfo, logSuccess } from "./utility/consolelogger";
+import { logDebug, logError, logInfo, logSuccess } from "./utility/logging/consolelogger";
 import { failureMessage } from "./utility/statusreply";
+import { inspectInteraction } from "./utility/logging/interactions";
 
 require("dotenv").config();
 
@@ -24,6 +25,7 @@ for (const file of commandFiles) {
 	commands.set(command.data.name, command);
 }
 client.on('interactionCreate', async interaction => {
+  logDebug(inspectInteraction(interaction));
 	if (!interaction.isCommand()) return;
 	const command = commands.get(interaction.commandName);
 	if (!command) return;

@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 import { REST } from '@discordjs/rest';
 import { Routes } from 'discord-api-types/v9';
-import { logError, logSuccess } from './utility/consolelogger';
+import { logError, logSuccess } from './utility/logging/consolelogger';
 //import { clientId, guildId, token } from '../config.json';
 
 require("dotenv").config();

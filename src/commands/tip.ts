@@ -1,7 +1,7 @@
 import { SlashCommandBuilder, SlashCommandStringOption } from "@discordjs/builders";
 import { CommandInteraction } from "discord.js";
 import fetch, { Request } from "node-fetch";
-import { logDebug } from "../utility/consolelogger";
+import { logDebug } from "../utility/logging/consolelogger";
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -24,7 +24,6 @@ module.exports = {
     const tips = await (await fetch("https://gist.githubusercontent.com/bleonard252/29ef20ea81a52df3acd565bee82ba310/raw/tips.json")).json();
     let redacted = false;
     if (tips["redacted"] && tips["redacted"].length != 0) {
-      logDebug((parseInt(ctx.id) >> 22) + 1420070400000);
       const ts = (parseInt(ctx.id) >> 22) + 1420070400000;
       if (Math.floor(ts/1000) % 120 == 0) redacted = true;
     }
