@@ -19,6 +19,11 @@
       "outFiles": [
         "${workspaceFolder}/**/*.js"
       ]
+    },
+    {
+      "type": "pwa-node",
+      "request": "attach",
+      "name": "Attach"
     }
   ]
 }
