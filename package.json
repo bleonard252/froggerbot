@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "bin": "src/index.ts",
   "scripts": {
     "build": "node -r ts-node/register src/build.ts",
     "dev:gateway": "node -r ts-node/register src/build.ts && node -r ts-node/register --inspect src/index.ts",
