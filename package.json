@@ -6,7 +6,7 @@
   "scripts": {
     "build": "node -r ts-node/register src/build.ts",
     "dev:gateway": "node -r ts-node/register src/build.ts && node -r ts-node/register --inspect src/index.ts",
-    "dev:gateway:watch": "npm run build && tsc-watch --project . --outDir ./dist --onSuccess \"nodemon --exec 'npm run dev:gateway'\""
+    "dev:gateway:watch": "npm run build && ts-node-dev src/index.ts"
   },
   "repository": {
     "type": "git",
@@ -28,9 +28,11 @@
     "discord.js": "^13.6.0",
     "dotenv": "^16.0.0",
     "filehound": "^1.17.5",
+    "node-fetch": "^2.6.7",
     "typescript": "^4.5.5"
   },
   "devDependencies": {
-    "ts-node": "^10.5.0"
+    "ts-node": "^10.5.0",
+    "ts-node-dev": "^1.1.8"
   }
 }

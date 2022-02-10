@@ -15,9 +15,9 @@ module.exports = {
       name: app.name,
       iconURL: app.icon ? app.iconURL({size: 64}) : `https://cdn.discordapp.com/embed/avatars/0.png`
     } as EmbedAuthorData)
-    .addField("Node.JS Version", process.version)
-    //.setFooter({text: "Hosted proudly "})
     .setTimestamp(app.createdAt);
+    embed.addField("Node.JS Version", process.version);
+    //.setFooter({text: "Hosted proudly "})
     if (app.owner) embed.addField("Owner", "<@"+app.owner.id+">");
     const buttons = new MessageActionRow().addComponents(
       new MessageButton()
