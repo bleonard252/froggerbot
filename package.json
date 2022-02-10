@@ -6,7 +6,7 @@
   "scripts": {
     "build": "node -r ts-node/register src/build.ts",
     "dev:gateway": "node -r ts-node/register src/build.ts && node -r ts-node/register --inspect src/index.ts",
-    "dev:gateway:watch": "npm run build && ts-node-dev src/index.ts"
+    "dev:gateway:watch": "npm run build && ts-node-dev --quiet --inspect -- src/index.ts"
   },
   "repository": {
     "type": "git",
