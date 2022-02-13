@@ -2,25 +2,31 @@ import { SlashCommandBuilder, SlashCommandStringOption } from "@discordjs/builde
 import { CommandInteraction, MessageActionRow, Modal, TextInputComponent } from "discord.js";
 import { TextInputStyles } from "discord.js/typings/enums";
 import { db } from "../utility/database";
+import { failureMessage } from "../utility/statusreply";
 
 module.exports = {
   data: new SlashCommandBuilder()
   .setName("poll")
-  .setDescription("Set up a poll with 2-4 custom choices. For yes/no, use /yesno.")
+  .setDescription("Set up a poll with 2-4 custom choices. For yes/no, use /yesno. USES A MODAL")
   .addStringOption(new SlashCommandStringOption()
     .setName("question")
     .setDescription("Pre-fill your question.")
     .setRequired(false)
   ),
-  execute(ctx: CommandInteraction) {
+  async execute(ctx: CommandInteraction) {
+    if (ctx.options.getString("question", false) 
+    && ctx.options.getString("question").length > 250) return await ctx.reply({
+      ...failureMessage("Your question cannot be over 250 characters."), 
+      ephemeral: true
+    });
     const _question = new TextInputComponent()
-    .setCustomId("newpoll:question")
-    .setStyle(TextInputStyles.SHORT)
-    .setLabel("Question")
-    .setMaxLength(250)
-    .setRequired(true);
+      .setCustomId("newpoll:question")
+      .setStyle(TextInputStyles.SHORT)
+      .setLabel("Question")
+      .setMaxLength(250)
+      .setRequired(true);
     if (ctx.options.getString("question", false)) _question.setValue(ctx.options.getString("question"));
-    ctx.presentModal(new Modal()
+    await ctx.presentModal(new Modal()
       .setTitle("New Poll")
       .setCustomId("newpoll")
       .addComponents(new MessageActionRow<TextInputComponent>()

@@ -11,7 +11,7 @@ module.exports = {
         fields: [
           {
             name: "🛡️ Moderation",
-            value: "Requires a modrole to be set. Only moderators, distinguished by the modrole, can use these commands.",
+            value: "Only moderators can use these commands.",
             inline: true
           },
           // {

@@ -1,5 +1,7 @@
+import * as chalk from "chalk";
 import { ButtonInteraction } from "discord.js";
 import { db } from "../../utility/database";
+import { logDebug, logError } from "../../utility/logging/consolelogger";
 import { failureMessage } from "../../utility/statusreply";
 
 module.exports = {
@@ -34,7 +36,7 @@ module.exports = {
       yesct = answers.filter((v,i,a) => v == "yes")?.length ?? 0;
       noct = answers.filter((v,i,a) => v == "no")?.length ?? 0;
     } catch(e) {
-      console.error("{{ ERROR in Poll command Calculate step }} ", e);
+      logError(chalk.underline("In Poll command Calculate step"), e);
       await ctx.followUp({
         ...failureMessage("The poll was not closed. An error occurred."),
         ephemeral: true
@@ -64,14 +66,15 @@ module.exports = {
     const b2 = order[1]?.value == order[0].value ? `**` : ``;
     const b3 = order[2]?.value == order[0].value ? `**` : ``;
     const b4 = order[3]?.value == order[0].value ? `**` : ``;
+    const makeZero = (v: number) => Number.isNaN(v) ? 0 : v ?? 0;
     await ctx.editReply({
-      allowedMentions: {repliedUser: false},
+      allowedMentions: {repliedUser: false, users: []},
       content: `**The poll is over!**\n<@${poll["owner"]}> asked:\n> `+poll["question"]+"\n" +
-      (order[0] ? `**\`${((order[0].value/ansct)*100).toString().padStart(3," ")}\%\`** **${order[0].key}**\n`
+      (order[0] ? `**\`${makeZero((order[0].value/ansct)*100).toString().padStart(3," ")}\%\`** **${order[0].key}**\n`
       : `🛑 No possible answers to this poll!`) +
-      (order[1] ? `${b2}\`${((order[1].value/ansct)*100).toString().padStart(3," ")}\%\`${b2} ${b2}${order[1].key}${b2}\n` : ``) +
-      (order[2] ? `${b3}\`${((order[2].value/ansct)*100).toString().padStart(3," ")}\%\`${b3} ${b3}${order[2].key}${b3}\n` : ``) +
-      (order[3] ? `${b4}\`${((order[3].value/ansct)*100).toString().padStart(3," ")}\%\`${b4} ${b4}${order[3].key}${b4}\n` : ``) +
+      (order[1] ? `${b2}\`${makeZero((order[1].value/ansct)*100).toString().padStart(3," ")}\%\`${b2} ${b2}${order[1].key}${b2}\n` : ``) +
+      (order[2] ? `${b3}\`${makeZero((order[2].value/ansct)*100).toString().padStart(3," ")}\%\`${b3} ${b3}${order[2].key}${b3}\n` : ``) +
+      (order[3] ? `${b4}\`${makeZero((order[3].value/ansct)*100).toString().padStart(3," ")}\%\`${b4} ${b4}${order[3].key}${b4}\n` : ``) +
       `**Total respondents:** ${ansct}\n`+
       (delSuccess ? `` : `⚠️ The poll was not deleted from the database!`),
       components: []

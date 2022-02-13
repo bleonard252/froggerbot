@@ -17,6 +17,10 @@ module.exports = {
   ),
   async execute(ctx: CommandInteraction) {
     //await ctx.deferReply(); //consistency
+    if (ctx.options.getString("question").length > 250) return await ctx.reply({
+      ...failureMessage("Your question cannot be over 250 characters."), 
+      ephemeral: true
+    });
     const pollId = ulid();
     try {
       await db.multi()
@@ -32,7 +36,7 @@ module.exports = {
     try {
       await ctx.reply({
         content: `<@${ctx.member.user.id}> asks:\n> `+ctx.options.getString("question"),
-        allowedMentions: {},
+        allowedMentions: {repliedUser: false, users: []},
         components: [
           {
             type: "ACTION_ROW",

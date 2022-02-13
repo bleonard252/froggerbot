@@ -7,7 +7,7 @@ export function inspectInteraction(interaction: Interaction) {
   if (interaction.isCommand()) {
     out.push(chalk`{bold Type:} Slash Command`);
     out.push(chalk`{bold Command:} /${interaction.commandName}`);
-    if (interaction.guild) out.push(chalk`{bold Server:} ${interaction.client.guilds.resolve(interaction.guildId).name || ""} {dim (${interaction.guildId})}`);
+    if (interaction.guild) out.push(chalk`{bold Server:} ${interaction.guild?.name || ""} {dim (${interaction.guildId})}`);
     else if (interaction.user) out.push(chalk`{bold DM from:} ${interaction.user?.username}{dim #${interaction.user.discriminator} (${interaction.user.id})}`);
     if (interaction.options.getSubcommand(false)) out.push(chalk`{bold Subcommand:} ${interaction.options.getSubcommand()}`);
   } else if (interaction.isMessageComponent() || interaction.isModalSubmit()) {
