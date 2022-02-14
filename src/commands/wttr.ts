@@ -12,7 +12,7 @@ module.exports = {
   ),
   execute(ctx: CommandInteraction) {
     ctx.reply({
-      content: "https://wttr.in/"+ctx.options.getString("location")+".png"
+      content: "https://wttr.in/"+ctx.options.getString("location").replaceAll(" ","+")+".png"
     });
   }
 }
