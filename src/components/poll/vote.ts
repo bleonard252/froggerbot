@@ -1,4 +1,4 @@
-import { Collection, MessageComponentInteraction } from "discord.js";
+import { ButtonStyle, Collection, ComponentType, MessageComponentInteraction } from "discord.js";
 import { db } from "../../utility/database";
 import { logDebug, logError } from "../../utility/logging/consolelogger";
 import { insertIf } from "../../utility/misc";
@@ -45,10 +45,10 @@ module.exports = {
       return await ctx.editReply({
         components: [
           {
-            type: "ACTION_ROW",
+            type: ComponentType.ActionRow,
             components: [
               {
-                type: "SELECT_MENU",
+                type: ComponentType.SelectMenu,
                 customId: "poll:"+pollId+":ans",
                 placeholder: "Vote for this poll",
                 options: [
@@ -77,17 +77,17 @@ module.exports = {
             ]
           },
           {
-            type: "ACTION_ROW",
+            type: ComponentType.ActionRow,
             components: [
               {
-                type: "BUTTON",
-                style: "SECONDARY",
+                type: ComponentType.Button,
+                style: ButtonStyle.Secondary,
                 label: "End poll",
                 customId: "poll:"+pollId+":end"
               },
               {
-                type: "BUTTON",
-                style: "SECONDARY",
+                type: ComponentType.Button,
+                style: ButtonStyle.Secondary,
                 label: "Manage poll",
                 emoji: {id: null, name: "⚙️"},
                 disabled: true,
@@ -129,32 +129,32 @@ module.exports = {
       return await ctx.editReply({
         components: [
           {
-            type: "ACTION_ROW",
+            type: ComponentType.ActionRow,
             components: [
               {
-                type: "BUTTON",
+                type: ComponentType.Button,
                 customId: "poll:"+pollId+":yes",
                 emoji: {id: null, name: "👍"},
                 //...insertIf(yesct > 0, {label: `${yesct}`}),
                 label: yesct > 0 ? `${yesct}` : undefined,
-                style: "SUCCESS"
+                style: ButtonStyle.Success
               },
               {
-                type: "BUTTON",
+                type: ComponentType.Button,
                 customId: "poll:"+pollId+":no",
                 emoji: {id: null, name: "👎"},
                 label: noct > 0 ? `${noct}` : undefined,
-                style: "DANGER"
+                style: ButtonStyle.Danger
               },
               {
-                type: "BUTTON",
-                style: "SECONDARY",
+                type: ComponentType.Button,
+                style: ButtonStyle.Secondary,
                 label: "End poll",
                 customId: "poll:"+pollId+":end"
               },
               {
-                type: "BUTTON",
-                style: "SECONDARY",
+                type: ComponentType.Button,
+                style: ButtonStyle.Secondary,
                 label: "Manage poll",
                 emoji: {id: null, name: "⚙️"},
                 disabled: true,

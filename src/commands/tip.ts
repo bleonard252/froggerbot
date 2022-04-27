@@ -1,5 +1,5 @@
 import { SlashCommandBuilder, SlashCommandStringOption } from "@discordjs/builders";
-import { CommandInteraction } from "discord.js";
+import { ChatInputCommandInteraction, CommandInteraction } from "discord.js";
 import fetch, { Request } from "node-fetch";
 import { logDebug } from "../utility/logging/consolelogger";
 
@@ -10,16 +10,18 @@ module.exports = {
   .addStringOption(new SlashCommandStringOption()
     .setName("category")
     .setDescription("Pick a category to get a more specific tip.")
-    .addChoices([
-      ["This bot", "bot"],
-      ["Splitgate", "splitgate"],
-      ["Minecraft", "minecraft"],
-      ["Lucid dreaming", "lucid"],
-      ["ARG solving", "solving"]
-    ])
+    // .addChoices([
+      // ])
+      .addChoices(
+      {name: "This bot", value: "bot"},
+      {name: "Splitgate", value: "splitgate"},
+      {name: "Minecraft", value: "minecraft"},
+      {name: "Lucid dreaming", value: "lucid"},
+      {name: "ARG solving", value: "solving"},
+    )
     .setRequired(false)
   ),
-  async execute(ctx: CommandInteraction) {
+  async execute(ctx: ChatInputCommandInteraction) {
     await ctx.deferReply();
     const tips = await (await fetch("https://gist.githubusercontent.com/bleonard252/29ef20ea81a52df3acd565bee82ba310/raw/tips.json")).json();
     let redacted = false;

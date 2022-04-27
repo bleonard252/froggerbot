@@ -1,5 +1,5 @@
 import * as chalk from "chalk";
-import { Interaction } from "discord.js";
+import { ChatInputCommandInteraction, Interaction } from "discord.js";
 
 export function inspectInteraction(interaction: Interaction) {
   var out: Array<string> = [];
@@ -9,7 +9,7 @@ export function inspectInteraction(interaction: Interaction) {
     out.push(chalk`{bold Command:} /${interaction.commandName}`);
     if (interaction.guild) out.push(chalk`{bold Server:} ${interaction.guild?.name || ""} {dim (${interaction.guildId})}`);
     else if (interaction.user) out.push(chalk`{bold DM from:} ${interaction.user?.username}{dim #${interaction.user.discriminator} (${interaction.user.id})}`);
-    if (interaction.options.getSubcommand(false)) out.push(chalk`{bold Subcommand:} ${interaction.options.getSubcommand()}`);
+    if (interaction instanceof ChatInputCommandInteraction && interaction.options.getSubcommand(false)) out.push(chalk`{bold Subcommand:} ${interaction.options.getSubcommand()}`);
   } else if (interaction.isMessageComponent() || interaction.isModalSubmit()) {
     if (interaction.isButton()) out.push(chalk`{bold Type:} Button`);
     else if (interaction.isSelectMenu()) out.push(chalk`{bold Type:} Select Menu`);

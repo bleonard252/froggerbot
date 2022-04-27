@@ -1,5 +1,5 @@
 import { SlashCommandBuilder, SlashCommandStringOption } from "@discordjs/builders";
-import { CommandInteraction } from "discord.js";
+import { ChatInputCommandInteraction, CommandInteraction } from "discord.js";
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -10,7 +10,7 @@ module.exports = {
     .setDescription("Where to check the weather for.")
     .setRequired(true)
   ),
-  execute(ctx: CommandInteraction) {
+  execute(ctx: ChatInputCommandInteraction) {
     ctx.reply({
       content: "https://wttr.in/"+ctx.options.getString("location").replaceAll(" ","+")+".png"
     });

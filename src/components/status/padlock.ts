@@ -1,5 +1,6 @@
+import { ButtonBuilder } from "@discordjs/builders";
 import * as chalk from "chalk";
-import { ButtonInteraction, InteractionReplyOptions, MessageButton, MessageButtonOptions, MessageOptions } from "discord.js";
+import { ButtonInteraction, ButtonStyle, ComponentType, InteractionReplyOptions, InteractionUpdateOptions, MessageOptions } from "discord.js";
 import { logError } from "../../utility/logging/consolelogger";
 import { failureMessage } from "../../utility/statusreply";
 
@@ -25,14 +26,14 @@ module.exports = {
   }
 }
 
-function vaultDoor(ctx: ButtonInteraction): InteractionReplyOptions {
+function vaultDoor(ctx: ButtonInteraction): InteractionUpdateOptions & InteractionReplyOptions {
   const value = ctx.customId.startsWith("padlock:") ? ctx.customId.split(":")[1] : "";
   return {
     content: "You have entered the secret vault... "+value,
     ephemeral: true,
     components: [
       {
-        type: "ACTION_ROW",
+        type: ComponentType.ActionRow,
         components: [
           _buildVaultButton("7", value),
           _buildVaultButton("8", value),
@@ -40,7 +41,7 @@ function vaultDoor(ctx: ButtonInteraction): InteractionReplyOptions {
         ]
       },
       {
-        type: "ACTION_ROW",
+        type: ComponentType.ActionRow,
         components: [
           _buildVaultButton("4", value),
           _buildVaultButton("5", value),
@@ -48,7 +49,7 @@ function vaultDoor(ctx: ButtonInteraction): InteractionReplyOptions {
         ]
       },
       {
-        type: "ACTION_ROW",
+        type: ComponentType.ActionRow,
         components: [
           _buildVaultButton("1", value),
           _buildVaultButton("2", value),
@@ -56,19 +57,19 @@ function vaultDoor(ctx: ButtonInteraction): InteractionReplyOptions {
         ]
       },
       {
-        type: "ACTION_ROW",
+        type: ComponentType.ActionRow,
         components: [
           {
-            type: "BUTTON",
+            type: ComponentType.Button,
             customId: "padlockclear",
-            style: (value??"").length >= 4 ? "DANGER" : "SECONDARY",
+            style: (value??"").length >= 4 ? ButtonStyle.Danger : ButtonStyle.Secondary,
             label: "X"
           },
           _buildVaultButton("0", value),
           {
-            type: "BUTTON",
+            type: ComponentType.Button,
             customId: "padlocksubmit:"+value,
-            style: value.length >= 4 ? "SUCCESS" : "SECONDARY",
+            style: value.length >= 4 ? ButtonStyle.Success : ButtonStyle.Secondary,
             emoji: { id: null, name: "✅" },
             disabled: value.length < 4
           }
@@ -77,10 +78,10 @@ function vaultDoor(ctx: ButtonInteraction): InteractionReplyOptions {
     ]
   }
 }
-const _buildVaultButton = (digit: string, value?: string): MessageButton => new MessageButton({
-  type: "BUTTON",
-  style: "PRIMARY",
-  customId: "padlock:"+(value??"")+digit,
+const _buildVaultButton = (digit: string, value?: string): ButtonBuilder => new ButtonBuilder({
+  type: ComponentType.Button,
+  style: ButtonStyle.Primary,
+  custom_id: "padlock:"+(value??"")+digit,
   label: digit,
   disabled: (value??"").length >= 8
 });

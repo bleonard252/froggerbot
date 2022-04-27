@@ -14,7 +14,9 @@ const client = new Client({
   presence: {
     status: "online"
   },
-  userAgentSuffix: ["Frogger (20220209)"]
+  rest: {
+    userAgentAppendix: "Frogger (20220427)"
+  }
 });
 
 FileHound.create()

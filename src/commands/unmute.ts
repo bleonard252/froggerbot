@@ -1,5 +1,5 @@
 import { SlashCommandBuilder, SlashCommandStringOption, SlashCommandUserOption } from "@discordjs/builders";
-import { CommandInteraction } from "discord.js";
+import { CommandInteraction, PermissionFlagsBits, PermissionsBitField } from "discord.js";
 import { logError } from "../utility/logging/consolelogger";
 import { failureMessage, successMessage } from "../utility/statusreply";
 
@@ -17,8 +17,11 @@ module.exports = {
     .setDescription("The reason the user is unmuted.")
     .setRequired(false)
   ),
+  extra: {
+    default_member_permissions: new PermissionsBitField(PermissionFlagsBits.ModerateMembers).bitfield.toString()
+  },
   async execute(ctx: CommandInteraction) {
-    if (!ctx.memberPermissions.has("MODERATE_MEMBERS", true)) return await ctx.reply({
+    if (!ctx.memberPermissions.has(PermissionFlagsBits.ModerateMembers, true)) return await ctx.reply({
       ...failureMessage("You have to have Moderate Members to unmute people.", "Permission denied"),
       ephemeral: true
     });
@@ -32,7 +35,7 @@ module.exports = {
       ...failureMessage("This user is not muted.", "Unmute failed"),
       ephemeral: true
     });
-    const reason = ctx.options.getString("reason", false);
+    const reason = ctx.options.get("reason", false).value as string;
     try {
       await member.timeout(0, reason);
       await ctx.reply({

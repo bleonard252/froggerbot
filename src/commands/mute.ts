@@ -1,8 +1,9 @@
-import { SlashCommandBuilder, SlashCommandStringOption, SlashCommandUserOption } from "@discordjs/builders";
-import { CommandInteraction, MessageActionRow, MessageButton } from "discord.js";
+import { ActionRowBuilder, ButtonBuilder, SlashCommandBuilder, SlashCommandStringOption, SlashCommandUserOption } from "@discordjs/builders";
+import { ButtonStyle, ChatInputCommandInteraction, CommandInteraction, PermissionFlagsBits, PermissionOverwrites, PermissionsBitField } from "discord.js";
 import { logError } from "../utility/logging/consolelogger";
 import { failureMessage, successMessage } from "../utility/statusreply";
 import * as Time from "duration-parser.js";
+import { APIActionRowComponent, APIMessageActionRowComponent } from "discord-api-types/v10";
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -24,8 +25,11 @@ module.exports = {
     .setDescription("The reason the user is muted.")
     .setRequired(false)
   ),
-  async execute(ctx: CommandInteraction) {
-    if (!ctx.memberPermissions.has("MODERATE_MEMBERS", true)) return await ctx.reply({
+  extra: {
+    default_member_permissions: new PermissionsBitField(PermissionFlagsBits.ModerateMembers).bitfield.toString()
+  },
+  async execute(ctx: ChatInputCommandInteraction) {
+    if (!ctx.memberPermissions.has(PermissionFlagsBits.ModerateMembers, true)) return await ctx.reply({
       ...failureMessage("You have to have Moderate Members to mute people.", "Permission denied"),
       ephemeral: true
     });
@@ -42,11 +46,12 @@ module.exports = {
       await ctx.reply({
         ...successMessage(`<@${user.id}> has been muted for ${duration.toString()}${reason ? ": "+reason : ""}`),
         allowedMentions: {},
-        components: [new MessageActionRow().addComponents(new MessageButton()
-          .setCustomId(`um!${ctx.member.user.id}:${user.id}`)
-          .setLabel("Unmute")
-          .setStyle("SECONDARY")
-        )]
+        components: [new ActionRowBuilder().addComponents([
+          new ButtonBuilder()
+            .setCustomId(`um!${ctx.member.user.id}:${user.id}`)
+            .setLabel("Unmute")
+            .setStyle(ButtonStyle.Primary)
+        ]).toJSON() as APIActionRowComponent<APIMessageActionRowComponent>]
       })
     } catch(e) {
       logError(e);

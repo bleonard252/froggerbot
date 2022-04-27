@@ -1,5 +1,5 @@
 import * as chalk from "chalk";
-import { ButtonInteraction } from "discord.js";
+import { ButtonInteraction, PermissionFlagsBits } from "discord.js";
 import { db } from "../../utility/database";
 import { logDebug, logError } from "../../utility/logging/consolelogger";
 import { failureMessage } from "../../utility/statusreply";
@@ -11,7 +11,7 @@ module.exports = {
     const pollId = ctx.customId.match(module.exports.custom_id_regex)[1];
     const ownerId = await db.hGet(pollId, "owner");
     const poll = await db.hGetAll(pollId);
-    if (!(ctx.memberPermissions.has("MANAGE_MESSAGES", true)
+    if (!(ctx.memberPermissions.has(PermissionFlagsBits.ManageMessages, true)
     || ctx.member.user.id == ownerId)) {
       await ctx.followUp({
         ...failureMessage("Only the poll's owner and the server's moderators can end the poll.", 

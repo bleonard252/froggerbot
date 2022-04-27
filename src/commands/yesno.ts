@@ -1,5 +1,5 @@
 import { SlashCommandBuilder, SlashCommandStringOption } from "@discordjs/builders";
-import { CommandInteraction } from "discord.js";
+import { ButtonStyle, ChatInputCommandInteraction, CommandInteraction, ComponentType } from "discord.js";
 import { ulid } from "ulid";
 import { db } from "../utility/database";
 import { logError } from "../utility/logging/consolelogger";
@@ -15,7 +15,7 @@ module.exports = {
     .setDescription("The question you want to ask.")
     .setRequired(true)
   ),
-  async execute(ctx: CommandInteraction) {
+  async execute(ctx: ChatInputCommandInteraction) {
     //await ctx.deferReply(); //consistency
     if (ctx.options.getString("question").length > 250) return await ctx.reply({
       ...failureMessage("Your question cannot be over 250 characters."), 
@@ -35,33 +35,33 @@ module.exports = {
     }
     try {
       await ctx.reply({
-        content: `<@${ctx.member.user.id}> asks:\n> `+ctx.options.getString("question"),
+        content: `<@${ctx.member.user.id}> asks:\n> `+ctx.options.get("question").value,
         allowedMentions: {repliedUser: false, users: []},
         components: [
           {
-            type: "ACTION_ROW",
+            type: ComponentType.ActionRow,
             components: [
               {
-                type: "BUTTON",
+                type: ComponentType.Button,
                 customId: "poll:"+pollId+":yes",
                 emoji: {id: null, name: "👍"},
-                style: "SUCCESS"
+                style: ButtonStyle.Success
               },
               {
-                type: "BUTTON",
+                type: ComponentType.Button,
                 customId: "poll:"+pollId+":no",
                 emoji: {id: null, name: "👎"},
-                style: "DANGER"
+                style: ButtonStyle.Danger
               },
               {
-                type: "BUTTON",
-                style: "SECONDARY",
+                type: ComponentType.Button,
+                style: ButtonStyle.Secondary,
                 label: "End poll",
                 customId: "poll:"+pollId+":end"
               },
               {
-                type: "BUTTON",
-                style: "SECONDARY",
+                type: ComponentType.Button,
+                style: ButtonStyle.Secondary,
                 label: "Manage poll",
                 emoji: {id: null, name: "⚙️"},
                 disabled: true,

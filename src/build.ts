@@ -15,9 +15,9 @@ for (const file of commandFiles) {
 	const command = require(`./commands/${file}`);
 	if (command.guild) guildCommands.set(command.guild, [
 		...guildCommands.get(command.guild),
-		command.data.toJSON()
+		{...command.data.toJSON(), ...(command.extra || {})}
 	]);
-	else globalCommands.push(command.data.toJSON());
+	else globalCommands.push({...command.data.toJSON(), ...(command.extra || {})});
 }
 
 const rest = new REST({ version: '9' }).setToken(process.env.TOKEN ?? "");

@@ -1,6 +1,5 @@
-import { SlashCommandBuilder, SlashCommandStringOption } from "@discordjs/builders";
-import { CommandInteraction, MessageActionRow, Modal, TextInputComponent } from "discord.js";
-import { TextInputStyles } from "discord.js/typings/enums";
+import { ActionRowBuilder, ModalBuilder, SlashCommandBuilder, SlashCommandStringOption, TextInputBuilder } from "@discordjs/builders";
+import { ChatInputCommandInteraction, CommandInteraction, TextInputComponent, TextInputStyle } from "discord.js";
 import { db } from "../utility/database";
 import { failureMessage } from "../utility/statusreply";
 
@@ -13,53 +12,53 @@ module.exports = {
     .setDescription("Pre-fill your question.")
     .setRequired(false)
   ),
-  async execute(ctx: CommandInteraction) {
-    if (ctx.options.getString("question", false) 
+  async execute(ctx: ChatInputCommandInteraction) {
+    if (ctx.options.get("question", false).value
     && ctx.options.getString("question").length > 250) return await ctx.reply({
       ...failureMessage("Your question cannot be over 250 characters."), 
       ephemeral: true
     });
-    const _question = new TextInputComponent()
+    const _question = new TextInputBuilder()
       .setCustomId("newpoll:question")
-      .setStyle(TextInputStyles.SHORT)
+      .setStyle(TextInputStyle.Short)
       .setLabel("Question")
       .setMaxLength(250)
       .setRequired(true);
-    if (ctx.options.getString("question", false)) _question.setValue(ctx.options.getString("question"));
-    await ctx.presentModal(new Modal()
+    if (ctx.options.getString("question")) _question.setValue(ctx.options.getString("question"));
+    await ctx.showModal(new ModalBuilder()
       .setTitle("New Poll")
       .setCustomId("newpoll")
-      .addComponents(new MessageActionRow<TextInputComponent>()
-        .addComponents(_question), new MessageActionRow<TextInputComponent>()
-        .addComponents(new TextInputComponent()
+      .addComponents([new ActionRowBuilder<TextInputBuilder>()
+        .addComponents([_question]), new ActionRowBuilder<TextInputBuilder>()
+        .addComponents([new TextInputBuilder()
           .setCustomId("newpoll:ans1")
-          .setStyle(TextInputStyles.SHORT)
+          .setStyle(TextInputStyle.Short)
           .setLabel("Answer 1")
           .setMaxLength(250)
           .setRequired(true)
-        ), new MessageActionRow<TextInputComponent>()
-        .addComponents(new TextInputComponent()
+        ]), new ActionRowBuilder<TextInputBuilder>()
+        .addComponents([new TextInputBuilder()
           .setCustomId("newpoll:ans2")
-          .setStyle(TextInputStyles.SHORT)
+          .setStyle(TextInputStyle.Short)
           .setLabel("Answer 2")
           .setMaxLength(250)
           .setRequired(true)
-        ), new MessageActionRow<TextInputComponent>()
-        .addComponents(new TextInputComponent()
+        ]), new ActionRowBuilder<TextInputBuilder>()
+        .addComponents([new TextInputBuilder()
           .setCustomId("newpoll:ans3")
-          .setStyle(TextInputStyles.SHORT)
+          .setStyle(TextInputStyle.Short)
           .setLabel("Answer 3")
           .setMaxLength(250)
           .setRequired(false)
-        ), new MessageActionRow<TextInputComponent>()
-        .addComponents(new TextInputComponent()
+        ]), new ActionRowBuilder<TextInputBuilder>()
+        .addComponents([new TextInputBuilder()
           .setCustomId("newpoll:ans4")
-          .setStyle(TextInputStyles.SHORT)
+          .setStyle(TextInputStyle.Short)
           .setLabel("Answer 4")
           .setMaxLength(250)
           .setRequired(false)
-        )
-      )
+        ])
+      ])
     )
   }
 }

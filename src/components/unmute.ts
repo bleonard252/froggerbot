@@ -1,4 +1,4 @@
-import { ButtonInteraction } from "discord.js";
+import { ButtonInteraction, PermissionFlagsBits } from "discord.js";
 import { logError } from "../utility/logging/consolelogger";
 import { failureMessage, successMessage } from "../utility/statusreply";
 
@@ -12,7 +12,7 @@ module.exports = {
       ...failureMessage("You are not the moderator who muted this user."),
       ephemeral: true
     }); else {
-      if (!ctx.memberPermissions.has("MODERATE_MEMBERS", true)) return await ctx.reply({
+      if (!ctx.memberPermissions.has(PermissionFlagsBits.ModerateMembers, true)) return await ctx.reply({
         ...failureMessage("You have to have Moderate Members to unmute people.", "Permission denied"),
         ephemeral: true
       });

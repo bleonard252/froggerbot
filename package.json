@@ -4,15 +4,13 @@
   "description": "",
   "main": "index.js",
   "bin": "src/index.ts",
+  "private": true,
   "scripts": {
     "build": "node -r ts-node/register src/build.ts",
     "dev:gateway": "node -r ts-node/register src/build.ts && node -r ts-node/register --inspect src/index.ts",
     "dev:gateway:watch": "npm run build && ts-node-dev --quiet --inspect -- src/index.ts"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/bleonard252/frogger.git"
-  },
+  "repository": "git+https://github.com/bleonard252/frogger.git",
   "keywords": [
     "discord-bot"
   ],
@@ -23,10 +21,10 @@
   },
   "homepage": "https://github.com/bleonard252/frogger#readme",
   "dependencies": {
-    "@discordjs/builders": "^0.12.0",
     "@discordjs/rest": "^0.3.0",
     "chalk": "^4.1.0",
-    "discord.js": "monbrey/discord.js#modals",
+    "discord.js": "^14.0.0-dev",
+    "@discordjs/builders": "^0.14.0-dev",
     "dotenv": "^16.0.0",
     "duration-parser.js": "^1.0.3",
     "filehound": "^1.17.5",

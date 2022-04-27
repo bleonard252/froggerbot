@@ -1,11 +1,12 @@
-import { ButtonInteraction, MessageEmbed } from "discord.js";
+import { EmbedBuilder } from "@discordjs/builders";
+import { ButtonInteraction } from "discord.js";
 
 module.exports = {
   custom_id: "statushelp",
   execute(ctx: ButtonInteraction) {
     ctx.reply({
       ephemeral: true,
-      embeds: [new MessageEmbed({
+      embeds: [new EmbedBuilder({
         title: "Command emoji",
         description: "Commands use emojis to distinguish certain privileges or features required to use it.",
         fields: [
