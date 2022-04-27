@@ -3,6 +3,7 @@ import * as chalk from "chalk";
 import { ButtonInteraction, ButtonStyle, ComponentType, InteractionReplyOptions, InteractionUpdateOptions, MessageOptions } from "discord.js";
 import { logError } from "../../utility/logging/consolelogger";
 import { failureMessage } from "../../utility/statusreply";
+import { APIButtonComponent } from "discord-api-types/v10";
 
 module.exports = {
   custom_id_regex: /^padlock/,
@@ -65,7 +66,7 @@ function vaultDoor(ctx: ButtonInteraction): InteractionUpdateOptions & Interacti
             style: (value??"").length >= 4 ? ButtonStyle.Danger : ButtonStyle.Secondary,
             label: "X"
           },
-          _buildVaultButton("0", value),
+          _buildVaultButton("0", value) as any,
           {
             type: ComponentType.Button,
             customId: "padlocksubmit:"+value,
@@ -78,10 +79,10 @@ function vaultDoor(ctx: ButtonInteraction): InteractionUpdateOptions & Interacti
     ]
   }
 }
-const _buildVaultButton = (digit: string, value?: string): ButtonBuilder => new ButtonBuilder({
+const _buildVaultButton = (digit: string, value?: string): APIButtonComponent => new ButtonBuilder({
   type: ComponentType.Button,
   style: ButtonStyle.Primary,
   custom_id: "padlock:"+(value??"")+digit,
   label: digit,
   disabled: (value??"").length >= 8
-});
+}).toJSON();
