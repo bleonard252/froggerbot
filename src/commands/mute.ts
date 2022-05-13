@@ -26,7 +26,8 @@ module.exports = {
     .setRequired(false)
   ),
   extra: {
-    default_member_permissions: new PermissionsBitField(PermissionFlagsBits.ModerateMembers).bitfield.toString()
+    default_member_permissions: new PermissionsBitField(PermissionFlagsBits.ModerateMembers).bitfield.toString(),
+    dm_permission: false
   },
   async execute(ctx: ChatInputCommandInteraction) {
     if (!ctx.memberPermissions.has(PermissionFlagsBits.ModerateMembers, true)) return await ctx.reply({
